@@ -28,6 +28,11 @@ public class Board {
 		putTilesToInitialPositions();
 	}
 	
+	public TileActor[] getAllTileActors()
+	{
+		return this.tileActors;
+	}
+	
 	public void addTile(Tile tile)
 	{
 		size++;

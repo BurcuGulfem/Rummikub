@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
@@ -26,16 +29,18 @@ public class GameScreen implements Screen {
 	final Okey game;
 	private Texture rack_texture, board_texture;
 	private Stage stage;
-	OrthographicCamera camera;	
+	OrthographicCamera camera;
 	Rectangle boardrect;
-	int rackWidth, rackHeight,boardsidepadding;
+	int rackWidth, rackHeight, boardsidepadding;
 	TileSet pool;
 	Board player;
-	int initialSize = 15; //# of tiles on the board
+	int initialSize = 15; // # of tiles on the board
 	public static BitmapFont tileFontRed, tileFontBlue, tileFontYellow,
 			tileFontGreen;
 	DragAndDrop dragAndDrop;
 	Group[] tileGroups;
+	TextButton button_newDeck, button_groupDoubles, button_groupSeries;
+	Skin uiSkin;
 
 	public GameScreen(Okey game) {
 		Texture.setEnforcePotImages(false);
@@ -48,18 +53,17 @@ public class GameScreen implements Screen {
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
-
 		defineResources();
 		defineVariables();
 
 		pool = new TileSet(); // creates a full set of tiles
 
 		startNewDeck();
-
-		// dragAndDrop.addSource();
+		placeButtons();
 	}
 
 	public void defineResources() {
+		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		tileFontRed = new BitmapFont(
 				Gdx.files.internal("data/fonts/calibri.fnt"),
 				Gdx.files.internal("data/fonts/calibri.png"), false);
@@ -82,6 +86,7 @@ public class GameScreen implements Screen {
 
 		rack_texture = new Texture(Gdx.files.internal("tile_small.png"));
 		board_texture = new Texture(Gdx.files.internal("board_small.png"));
+
 	}
 
 	public void defineVariables() {
@@ -97,11 +102,61 @@ public class GameScreen implements Screen {
 		rackHeight = rack_texture.getHeight();
 		rackWidth = rack_texture.getWidth();
 
-		boardsidepadding = 200;
+		boardsidepadding = (int) boardrect.getX() + rackWidth + 5;
+		// (int)(Gdx.graphics.getWidth()-boardrect.width)/2;
 
 	}
 
+	public void placeButtons() {
+		Table table = new Table();
+		table.setPosition(100, Gdx.graphics.getHeight() - 150);
+		
+		//table.set
+
+		button_groupDoubles = new TextButton("Group Doubles", uiSkin);
+		button_groupDoubles.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				Gdx.app.log("my app", "Pressed"); // ** Usually used to start
+													// Game, etc. **//
+				return true;
+			}
+		});
+
+		button_groupSeries = new TextButton("Group Series", uiSkin);
+		button_groupSeries.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				Gdx.app.log("my app", "Pressed"); // ** Usually used to start
+													// Game, etc. **//
+				return true;
+			}
+		});
+
+		button_newDeck = new TextButton("New Deck", uiSkin);
+		button_newDeck.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				startNewDeck();
+				return true;
+			}
+		});
+
+		
+		table.add(button_groupDoubles).width(150).height(60);
+		table.row();//starts a new row. like /n
+		table.add(button_groupSeries).width(150).height(60);;
+		table.row();
+		table.add(button_newDeck).width(150).height(60);;
+		stage.addActor(table);
+	}
+
 	public void startNewDeck() {
+		// remove all previous actors from the stage.
+		if (player != null)
+			for (TileActor actor : player.getAllTileActors())
+				stage.getRoot().removeActor(actor);
+		
 		player = new Board(pool, initialSize, boardsidepadding, rackWidth,
 				boardrect); // creates the player's hand by
 		// selecting 14 random tiles and
@@ -111,6 +166,7 @@ public class GameScreen implements Screen {
 
 		final Skin skin = new Skin();
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
+
 		for (int i = 0; i < player.rackSize(); i++) {
 			TileActor actor = player.getActor(i);
 			stage.addActor(actor);

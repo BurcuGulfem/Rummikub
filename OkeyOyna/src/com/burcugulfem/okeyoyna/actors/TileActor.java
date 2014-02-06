@@ -49,6 +49,7 @@ public class TileActor extends Actor{
 	 {
 		 this.positionOnBoard=newPosition;
 	 }
+	 
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {		

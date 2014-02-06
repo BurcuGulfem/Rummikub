@@ -47,4 +47,5 @@ public class Tile{
 	public void setTileColor(int tileColor) {
 		this.tileColor = tileColor;
 	}
+	
 }
