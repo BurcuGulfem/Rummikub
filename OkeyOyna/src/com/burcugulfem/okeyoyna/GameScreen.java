@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -38,7 +37,6 @@ public class GameScreen implements Screen {
 	public static BitmapFont tileFontRed, tileFontBlue, tileFontYellow,
 			tileFontGreen;
 	DragAndDrop dragAndDrop;
-	Group[] tileGroups;
 	TextButton button_newDeck, button_groupDoubles, button_groupSeries;
 	Skin uiSkin;
 
@@ -117,8 +115,8 @@ public class GameScreen implements Screen {
 		button_groupDoubles.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				Gdx.app.log("my app", "Pressed"); // ** Usually used to start
-													// Game, etc. **//
+			//	player.setDouble();
+			
 				return true;
 			}
 		});
@@ -127,8 +125,7 @@ public class GameScreen implements Screen {
 		button_groupSeries.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				Gdx.app.log("my app", "Pressed"); // ** Usually used to start
-													// Game, etc. **//
+				
 				return true;
 			}
 		});
@@ -162,7 +159,6 @@ public class GameScreen implements Screen {
 		// selecting 14 random tiles and
 		// removing these tiles from the
 		// rack.
-		tileGroups = new Group[7]; // there are 15 tiles, max group count is 7.
 
 		final Skin skin = new Skin();
 		skin.add("default", new LabelStyle(new BitmapFont(), Color.WHITE));
@@ -288,5 +284,6 @@ public class GameScreen implements Screen {
 		tileFontYellow.dispose();
 		tileFontGreen.dispose();
 	}
-
+	
+	
 }

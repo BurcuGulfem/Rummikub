@@ -48,4 +48,15 @@ public class Tile{
 		this.tileColor = tileColor;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Tile)
+		{
+			Tile t=(Tile)obj;
+			if((t.tileColor==this.tileColor)&&(t.tileValue==this.tileValue))return true;
+			else return false;
+		}
+		return false;
+	}
+	
 }

@@ -1,19 +1,27 @@
 package com.burcugulfem.okeyoyna.logic;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.burcugulfem.okeyoyna.actors.TileActor;
 
 public class Board {
-	public int size = 0;
+	public int size = 0,groupsize=0;
 	Tile [] tiles;
 	TileActor[] tileActors;
 	int boardsidepadding,rackWidth;
 	Rectangle boardrect;
+	Group[] tileGroups;
 	
 	public Board(TileSet the_pool, int initialSize,int boardsidepadding,int rackWidth,Rectangle boardrect)
 	{
 		tileActors=new TileActor[30];
+		tileGroups=new Group[7];
 		tiles=new Tile[initialSize];
 		size = 0;
 		this.rackWidth=rackWidth;
@@ -182,6 +190,60 @@ public class Board {
 				}
 		}
 		return false;	
+	}
+	
+	public Group[] setDouble()
+	{
+		tileGroups=new Group[30];
+		groupsize=0;
+		HashMap<Tile,TileActor> doubleTest=new HashMap<Tile, TileActor>();
+		
+		for (TileActor tileactor : tileActors)
+		{
+		  if (tileactor.getTile()!=null)
+			  {
+			  if(doubleTest.containsKey(tileactor.getTile())) {
+				  /* Found a double */ 
+				  tileGroups[groupsize]=new Group();
+				  tileGroups[groupsize].addActor(doubleTest.get(tileactor.getTile()));
+				  tileGroups[groupsize].addActor(tileactor);
+				  groupsize++;
+			  }
+			  doubleTest.put(tileactor.getTile(), tileactor);
+			  }		 
+		}
+		return tileGroups;		
+	}
+	
+	public Group[] setSeries()
+	{
+		HashMap<Integer, HashSet<Integer>> groupTest = new HashMap<Integer, HashSet<Integer>>();
+		HashMap<Integer, boolean[]> straightTest = new HashMap<Integer, boolean[]>();
+//		for (TileActor tile : tileActors)
+//		{
+//		  groupTest[tile.Number].Add(tile.Color);
+//		  straightTest[tile.Color][tile.Number] = true;
+//		}
+//		for(int number : groupTest.keySet())
+//		{
+//		  HashSet<Tile> group = groupTest[number];
+//		  if (group.size() >= 3) { /* Found a group */ }
+//		}
+//		for (int color : straightTest.keySet())
+//		{
+//		  HashSet<Integer> straight = straightTest[color];
+//		  int consecutive = 0;
+//		  for (int i = 1; i < HIGHEST_NUMBER; ++i)
+//		  {
+//		    if (straight[i-1] && straight[i])
+//		      consecutive++;
+//		    else
+//		      consecutive = 0;
+//
+//		    if (consecutive >= 3) { /* Found a straight. */ }
+//		  }
+//		}
+		return tileGroups;
 	}
 	
 }
